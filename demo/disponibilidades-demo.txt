@@ -1,0 +1,29 @@
+# DADOS FICTÍCIOS para demonstração (nenhuma pessoa real).
+# Formato: Nome;DIA;HH:mm-HH:mm   (DIA = SEG, TER, QUA, QUI, SEX, SAB, DOM)
+# Horários em múltiplos de 30 minutos. Cada linha é um intervalo em que a pessoa está livre.
+# Neste arquivo EXISTE horário em comum para os 6 integrantes.
+
+Ana;SEG;18:00-21:00
+Ana;QUA;18:30-22:00
+Ana;SAB;08:00-12:00
+
+Bruno;SEG;19:00-22:00
+Bruno;QUA;19:00-21:30
+Bruno;QUI;18:00-20:00
+Bruno;SAB;09:00-13:00
+
+Carla;TER;18:00-21:00
+Carla;QUA;19:00-23:00
+Carla;SAB;09:00-11:30
+
+Diego;SEG;20:00-22:00
+Diego;QUA;17:00-21:00
+Diego;SAB;10:00-12:00
+
+Elisa;TER;18:00-20:00
+Elisa;QUA;19:00-22:00
+Elisa;SAB;09:30-12:00
+
+Fabio;QUA;18:00-21:00
+Fabio;SEX;19:00-22:00
+Fabio;SAB;10:00-14:00

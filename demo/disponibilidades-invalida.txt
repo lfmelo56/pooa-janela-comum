@@ -1,0 +1,4 @@
+# Arquivo com um erro de propósito, para demonstrar a validação de entrada.
+Ana;QUA;19:00-21:00
+Bruno;QUA;19:00-21:00
+Carla;FERIADO;19:00-21:00
