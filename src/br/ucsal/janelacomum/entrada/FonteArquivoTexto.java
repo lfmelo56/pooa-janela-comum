@@ -27,7 +27,7 @@ public class FonteArquivoTexto implements FonteDeDisponibilidades {
             linhas = Files.readAllLines(arquivo, StandardCharsets.UTF_8);
         } catch (IOException e) {
             throw new EntradaInvalidaException(
-                    "não foi possível ler o arquivo '" + arquivo + "' (ele existe e está em UTF-8?).");
+                    "não foi possível ler o arquivo '" + arquivo + "' (ele existe e está em UTF-8?).", e);
         }
 
         List<Disponibilidade> disponibilidades = new ArrayList<>();
@@ -39,7 +39,7 @@ public class FonteArquivoTexto implements FonteDeDisponibilidades {
             try {
                 disponibilidades.add(interpretador.interpretar(linha));
             } catch (EntradaInvalidaException e) {
-                throw new EntradaInvalidaException("Linha " + (i + 1) + ": " + e.getMessage());
+                throw new EntradaInvalidaException("Linha " + (i + 1) + ": " + e.getMessage(), e);
             }
         }
         return disponibilidades;

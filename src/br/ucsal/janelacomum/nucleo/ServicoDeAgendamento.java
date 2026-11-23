@@ -21,6 +21,7 @@ public class ServicoDeAgendamento {
 
     public ServicoDeAgendamento(FonteDeDisponibilidades fonte, CalculadoraDeJanelas calculadora,
                                 Comparator<Janela> criterio, int duracaoMinimaEmMinutos) {
+        CalculadoraDeJanelas.validarDuracaoMinima(duracaoMinimaEmMinutos);
         this.fonte = fonte;
         this.calculadora = calculadora;
         this.criterio = criterio;
@@ -30,7 +31,7 @@ public class ServicoDeAgendamento {
     public ResultadoDaBusca buscar() {
         List<Disponibilidade> disponibilidades = fonte.carregar();
 
-        Set<String> participantes = new TreeSet<>();
+        Set<String> participantes = new TreeSet<>(Disponibilidade.ORDEM_DOS_NOMES);
         disponibilidades.forEach(d -> participantes.add(d.nome()));
         if (participantes.size() < 2) {
             throw new EntradaInvalidaException("informe a disponibilidade de pelo menos 2 pessoas.");

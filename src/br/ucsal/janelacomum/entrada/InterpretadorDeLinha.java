@@ -16,7 +16,7 @@ public class InterpretadorDeLinha {
                     "use o formato Nome;DIA;HH:mm-HH:mm (ex.: Ana;QUA;19:00-21:00).");
         }
 
-        String[] horas = partes[2].split("-", -1);
+        String[] horas = partes[2].replace('\u2013', '-').replace('\u2014', '-').split("-", -1);
         if (horas.length != 2) {
             throw new EntradaInvalidaException(
                     "o intervalo deve ser HH:mm-HH:mm (ex.: 19:00-21:00).");
@@ -25,8 +25,8 @@ public class InterpretadorDeLinha {
         return new Disponibilidade(
                 partes[0],
                 interpretarDia(partes[1]),
-                interpretarHora(horas[0]),
-                interpretarHora(horas[1]));
+                interpretarHora(horas[0], false),
+                interpretarHora(horas[1], true));
     }
 
     private DayOfWeek interpretarDia(String texto) {
@@ -43,12 +43,16 @@ public class InterpretadorDeLinha {
         };
     }
 
-    private LocalTime interpretarHora(String texto) {
+    private LocalTime interpretarHora(String texto, boolean ehHorarioFinal) {
+        String horario = texto.trim();
+        if (ehHorarioFinal && horario.equals("24:00")) {
+            return LocalTime.MIDNIGHT;
+        }
         try {
-            return LocalTime.parse(texto.trim());
+            return LocalTime.parse(horario);
         } catch (DateTimeParseException e) {
             throw new EntradaInvalidaException(
-                    "horário '" + texto.trim() + "' inválido. Use HH:mm, ex.: 08:30.");
+                    "horário '" + horario + "' inválido. Use HH:mm, ex.: 08:30.");
         }
     }
 }

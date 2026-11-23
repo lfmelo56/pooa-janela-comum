@@ -13,11 +13,19 @@ import java.util.TreeSet;
 public class CalculadoraDeJanelas {
 
     private static final int BLOCO = Disponibilidade.BLOCO_EM_MINUTOS;
-    private static final int BLOCOS_NO_DIA = 24 * 60 / BLOCO;
+    private static final int BLOCOS_NO_DIA = Disponibilidade.BLOCOS_NO_DIA;
     private static final int MINIMO_DE_PESSOAS = 2;
 
+    public static void validarDuracaoMinima(int minutos) {
+        if (minutos <= 0 || minutos % BLOCO != 0) {
+            throw new IllegalArgumentException(
+                    "a duração mínima deve ser positiva e múltipla de " + BLOCO + " minutos.");
+        }
+    }
+
     public List<Janela> calcular(List<Disponibilidade> disponibilidades, int duracaoMinimaEmMinutos) {
-        Set<String> todos = new TreeSet<>();
+        validarDuracaoMinima(duracaoMinimaEmMinutos);
+        Set<String> todos = new TreeSet<>(Disponibilidade.ORDEM_DOS_NOMES);
         disponibilidades.forEach(d -> todos.add(d.nome()));
 
         List<Janela> janelas = new ArrayList<>();
@@ -31,13 +39,13 @@ public class CalculadoraDeJanelas {
     private List<Set<String>> livresPorBloco(List<Disponibilidade> disponibilidades, DayOfWeek dia) {
         List<Set<String>> livres = new ArrayList<>();
         for (int i = 0; i < BLOCOS_NO_DIA; i++) {
-            livres.add(new TreeSet<>());
+            livres.add(new TreeSet<>(Disponibilidade.ORDEM_DOS_NOMES));
         }
         for (Disponibilidade d : disponibilidades) {
             if (d.dia() != dia) {
                 continue;
             }
-            for (int bloco = numeroDoBloco(d.inicio()); bloco < numeroDoBloco(d.fim()); bloco++) {
+            for (int bloco = d.blocoInicial(); bloco < d.blocoFinal(); bloco++) {
                 livres.get(bloco).add(d.nome());
             }
         }
@@ -57,17 +65,14 @@ public class CalculadoraDeJanelas {
 
             int duracao = (fim - inicio) * BLOCO;
             if (grupo.size() >= MINIMO_DE_PESSOAS && duracao >= duracaoMinimaEmMinutos) {
-                Set<String> ausentes = new TreeSet<>(todos);
+                Set<String> ausentes = new TreeSet<>(Disponibilidade.ORDEM_DOS_NOMES);
+                ausentes.addAll(todos);
                 ausentes.removeAll(grupo);
                 janelas.add(new Janela(dia, horarioDoBloco(inicio), horarioDoBloco(fim), grupo, ausentes));
             }
             inicio = fim;
         }
         return janelas;
-    }
-
-    private int numeroDoBloco(LocalTime horario) {
-        return horario.toSecondOfDay() / 60 / BLOCO;
     }
 
     private LocalTime horarioDoBloco(int bloco) {

@@ -5,6 +5,7 @@ import br.ucsal.janelacomum.modelo.ResultadoDaBusca;
 
 import java.io.PrintStream;
 import java.time.DayOfWeek;
+import java.time.LocalTime;
 import java.util.List;
 
 public class ApresentadorConsole implements ApresentadorDeResultado {
@@ -45,7 +46,7 @@ public class ApresentadorConsole implements ApresentadorDeResultado {
     private void imprimir(List<Janela> janelas, boolean mostrarAusentes) {
         int numero = 1;
         for (Janela j : janelas) {
-            String linha = " " + numero + ") " + nomeDoDia(j.dia()) + " " + j.inicio() + "-" + j.fim()
+            String linha = " " + numero + ") " + nomeDoDia(j.dia()) + " " + j.inicio() + "-" + horaFinal(j.fim())
                     + " (" + j.duracaoEmMinutos() + " min)";
             if (mostrarAusentes) {
                 int total = j.presentes().size() + j.ausentes().size();
@@ -56,6 +57,10 @@ public class ApresentadorConsole implements ApresentadorDeResultado {
             saida.println(linha);
             numero++;
         }
+    }
+
+    private String horaFinal(LocalTime fim) {
+        return fim.equals(LocalTime.MIDNIGHT) ? "24:00" : fim.toString();
     }
 
     private String nomeDoDia(DayOfWeek dia) {
